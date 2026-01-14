@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Script Breathing Trainer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.secondary {
+            background: #6c757d;
+        }
+
+        button.secondary:hover {
+            background: #5a6268;
+        }
+
+        button.success {
+            background: #28a745;
+        }
+
+        button.success:hover {
+            background: #218838;
+        }
+
+        .script-display {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            min-height: 200px;
+            font-size: 18px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .word {
+            display: inline;
+            margin-right: 0.3em;
+        }
+
+        .word.hidden {
+            background: #333;
+            color: transparent;
+            border-radius: 4px;
+            padding: 0 4px;
+            user-select: none;
+        }
+
+        .word.hidden.revealed {
+            background: #28a745;
+            color: white;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            background: #e9ecef;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-item {
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 16px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .saved-scripts {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .script-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .script-name {
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+        }
+
+        .script-item-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .control-group {
+                justify-content: space-between;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+        .hidden-element {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Script Breathing Trainer</h1>
+
+        <div class="section" id="input-section">
+            <div class="section-title">Paste your script</div>
+            <textarea id="script-input" placeholder="Paste your script here..."></textarea>
+            <div style="margin-top: 15px;">
+                <input type="text" id="script-name" placeholder="Script name (optional)" style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 10px;">
+                <button onclick="loadScript()">Load Script</button>
+            </div>
+        </div>
+
+        <div class="section hidden-element" id="training-section">
+            <div class="stats">
+                <div class="stat-item">
+                    Total words: <span class="stat-value" id="total-words">0</span>
+                </div>
+                <div class="stat-item">
+                    Hidden: <span class="stat-value" id="hidden-count">0</span>
+                </div>
+                <div class="stat-item">
+                    Visible: <span class="stat-value" id="visible-count">0</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Hide words:</label>
+                    <input type="number" id="hide-count" min="0" value="0">
+                </div>
+
+                <div class="control-group">
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="mode" value="random" checked>
+                            Random
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="mode" value="sequential">
+                            Sequential
+                        </label>
+                    </div>
+                </div>
+
+                <button onclick="applyHiding()">Apply</button>
+            </div>
+
+            <div class="script-display" id="script-display"></div>
+
+            <div class="action-buttons">
+                <button onclick="nextStep()">Next Step +1</button>
+                <button onclick="prevStep()" class="secondary">Previous Step -1</button>
+                <button onclick="revealAll()" class="success">Show Answers</button>
+                <button onclick="resetScript()" class="secondary">New Script</button>
+                <button onclick="saveCurrentScript()" class="success">Save Script</button>
+            </div>
+        </div>
+
+        <div class="saved-scripts hidden-element" id="saved-section">
+            <div class="section-title">Saved Scripts</div>
+            <div id="saved-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentScript = '';
+        let words = [];
+        let hiddenIndices = new Set();
+        let currentHideCount = 0;
+        let isRevealed = false;
+        let scriptName = '';
+
+        function loadScript() {
+            const input = document.getElementById('script-input').value.trim();
+            const nameInput = document.getElementById('script-name').value.trim();
+
+            if (!input) {
+                alert('Please paste a script!');
+                return;
+            }
+
+            currentScript = input;
+            scriptName = nameInput || 'Untitled';
+            words = currentScript.split(/\s+/).filter(w => w.length > 0);
+            hiddenIndices.clear();
+            currentHideCount = 0;
+            isRevealed = false;
+
+            document.getElementById('hide-count').max = words.length;
+            document.getElementById('hide-count').value = 0;
+
+            document.getElementById('input-section').classList.add('hidden-element');
+            document.getElementById('training-section').classList.remove('hidden-element');
+
+            updateDisplay();
+            updateStats();
+        }
+
+        function applyHiding() {
+            const hideCount = parseInt(document.getElementById('hide-count').value) || 0;
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+
+            currentHideCount = Math.min(hideCount, words.length);
+            hiddenIndices.clear();
+            isRevealed = false;
+
+            if (mode === 'random') {
+                const indices = [...Array(words.length).keys()];
+                for (let i = indices.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [indices[i], indices[j]] = [indices[j], indices[i]];
+                }
+                for (let i = 0; i < currentHideCount; i++) {
+                    hiddenIndices.add(indices[i]);
+                }
+            } else {
+                for (let i = 0; i < currentHideCount; i++) {
+                    hiddenIndices.add(i);
+                }
+            }
+
+            updateDisplay();
+            updateStats();
+        }
+
+        function nextStep() {
+            if (currentHideCount >= words.length) {
+                alert('All words are already hidden!');
+                return;
+            }
+
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            isRevealed = false;
+
+            if (mode === 'random') {
+                const availableIndices = [...Array(words.length).keys()].filter(i => !hiddenIndices.has(i));
+                if (availableIndices.length > 0) {
+                    const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+                    hiddenIndices.add(randomIndex);
+                }
+            } else {
+                hiddenIndices.add(currentHideCount);
+            }
+
+            currentHideCount++;
+            document.getElementById('hide-count').value = currentHideCount;
+            updateDisplay();
+            updateStats();
+        }
+
+        function prevStep() {
+            if (currentHideCount <= 0) {
+                alert('No hidden words!');
+                return;
+            }
+
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            isRevealed = false;
+
+            if (mode === 'random') {
+                const hiddenArray = Array.from(hiddenIndices);
+                if (hiddenArray.length > 0) {
+                    const randomHidden = hiddenArray[Math.floor(Math.random() * hiddenArray.length)];
+                    hiddenIndices.delete(randomHidden);
+                }
+            } else {
+                hiddenIndices.delete(currentHideCount - 1);
+            }
+
+            currentHideCount--;
+            document.getElementById('hide-count').value = currentHideCount;
+            updateDisplay();
+            updateStats();
+        }
+
+        function revealAll() {
+            isRevealed = !isRevealed;
+            updateDisplay();
+        }
+
+        function resetScript() {
+            document.getElementById('script-input').value = '';
+            document.getElementById('script-name').value = '';
+            document.getElementById('input-section').classList.remove('hidden-element');
+            document.getElementById('training-section').classList.add('hidden-element');
+            currentScript = '';
+            words = [];
+            hiddenIndices.clear();
+            currentHideCount = 0;
+            isRevealed = false;
+            scriptName = '';
+        }
+
+        function updateDisplay() {
+            const display = document.getElementById('script-display');
+            display.innerHTML = words.map((word, index) => {
+                const isHidden = hiddenIndices.has(index);
+                const classes = ['word'];
+                if (isHidden) {
+                    classes.push('hidden');
+                    if (isRevealed) {
+                        classes.push('revealed');
+                    }
+                }
+                return `<span class="${classes.join(' ')}">${word}</span>`;
+            }).join(' ');
+        }
+
+        function updateStats() {
+            document.getElementById('total-words').textContent = words.length;
+            document.getElementById('hidden-count').textContent = hiddenIndices.size;
+            document.getElementById('visible-count').textContent = words.length - hiddenIndices.size;
+        }
+
+        function saveCurrentScript() {
+            if (!currentScript) {
+                alert('No script to save!');
+                return;
+            }
+
+            const saved = JSON.parse(localStorage.getItem('savedScripts') || '[]');
+            const newScript = {
+                id: Date.now(),
+                name: scriptName,
+                content: currentScript,
+                wordCount: words.length,
+                savedAt: new Date().toLocaleString('en-US')
+            };
+
+            saved.push(newScript);
+            localStorage.setItem('savedScripts', JSON.stringify(saved));
+
+            alert('Script saved!');
+            loadSavedScripts();
+        }
+
+        function loadSavedScripts() {
+            const saved = JSON.parse(localStorage.getItem('savedScripts') || '[]');
+            const listElement = document.getElementById('saved-list');
+
+            if (saved.length === 0) {
+                document.getElementById('saved-section').classList.add('hidden-element');
+                return;
+            }
+
+            document.getElementById('saved-section').classList.remove('hidden-element');
+
+            listElement.innerHTML = saved.map(script => `
+                <div class="script-item">
+                    <div>
+                        <div class="script-name">${script.name}</div>
+                        <div style="font-size: 12px; color: #6c757d;">
+                            ${script.wordCount} words | ${script.savedAt}
+                        </div>
+                    </div>
+                    <div class="script-item-buttons">
+                        <button class="btn-small success" onclick="loadSavedScript(${script.id})">Load</button>
+                        <button class="btn-small secondary" onclick="deleteSavedScript(${script.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadSavedScript(id) {
+            const saved = JSON.parse(localStorage.getItem('savedScripts') || '[]');
+            const script = saved.find(s => s.id === id);
+
+            if (!script) return;
+
+            document.getElementById('script-input').value = script.content;
+            document.getElementById('script-name').value = script.name;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteSavedScript(id) {
+            if (!confirm('Delete this script?')) return;
+
+            const saved = JSON.parse(localStorage.getItem('savedScripts') || '[]');
+            const filtered = saved.filter(s => s.id !== id);
+            localStorage.setItem('savedScripts', JSON.stringify(filtered));
+
+            loadSavedScripts();
+        }
+
+        loadSavedScripts();
+    </script>
+</body>
+</html>
