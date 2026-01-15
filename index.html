@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(160deg, #2c3e50 0%, #34495e 50%, #3d566e 100%);
             min-height: 100vh;
             padding: 20px;
             color: #333;
@@ -30,7 +30,7 @@
 
         h1 {
             text-align: center;
-            color: #667eea;
+            color: #2c3e50;
             margin-bottom: 30px;
             font-size: 2em;
         }
@@ -62,7 +62,7 @@
 
         textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #34495e;
         }
 
         .controls {
@@ -90,7 +90,7 @@
 
         input[type="number"]:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #34495e;
         }
 
         .radio-group {
@@ -114,7 +114,7 @@
 
         button {
             padding: 12px 24px;
-            background: #667eea;
+            background: #34495e;
             color: white;
             border: none;
             border-radius: 8px;
@@ -125,9 +125,9 @@
         }
 
         button:hover {
-            background: #5568d3;
+            background: #2c3e50;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.4);
         }
 
         button:active {
@@ -198,7 +198,7 @@
 
         .stat-value {
             font-weight: 700;
-            color: #667eea;
+            color: #2c3e50;
             font-size: 16px;
         }
 
@@ -272,6 +272,24 @@
         .hidden-element {
             display: none;
         }
+
+        .footer-cta {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+        }
+
+        .footer-cta a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .footer-cta a:hover {
+            color: white;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -337,6 +355,11 @@
             <div class="section-title">Saved Scripts</div>
             <div id="saved-list"></div>
         </div>
+
+    </div>
+
+    <div class="footer-cta">
+        Technical help with improving your outbound system: <a href="https://wa.me/628175755953" target="_blank">Leonid</a>
     </div>
 
     <script>
